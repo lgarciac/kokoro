@@ -1,4 +1,18 @@
 from flask import Flask, render_template
+import inspect
+import warnings
+
+# Compatibility layer for inspect.getargspec()
+if not hasattr(inspect, 'getargspec'):
+    def getargspec(func):
+        warnings.warn(
+            "inspect.getargspec() is deprecated, use inspect.getfullargspec() instead",
+            DeprecationWarning,
+            stacklevel=2
+        )
+        return inspect.getfullargspec(func)
+
+    inspect.getargspec = getargspec
 
 app = Flask(__name__)
 
@@ -14,5 +28,5 @@ def about():
 def Pricing():
     return render_template('Payments.html')
 
-if __name__== '__main__':
+if __name__ == '__main__':
     app.run(debug=True)
